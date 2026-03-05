@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Item Details - Fuzzy Wire Bouquet</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-content">
+        <div>
+          <p class="brand">FuzzBloom Creations</p>
+          <p class="tagline">Handcrafted Blooms That Last Forever.</p>
+        </div>
+        <div style="display: flex; gap: 1rem; align-items: center;">
+          <button class="cart-icon-btn" onclick="viewCart()">
+            🛒
+            <span class="cart-badge" id="cartBadge">0</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="item-detail" id="detail">
+        <div class="container">
+          <a href="index.html" class="back-link">← Back to Home Page</a>
+          <div class="detail-content">
+            <div class="detail-image-section">
+              <img id="itemImage" src="" alt="Item" class="detail-image" />
+            </div>
+
+            <div class="detail-info-section">
+              <h1 id="itemName"></h1>
+              
+              <div class="detail-options">
+                <h3>Available Options:</h3>
+                <div id="optionsList" class="options-list"></div>
+              </div>
+
+              <div class="detail-actions">
+                <button class="secondary" onclick="addProductToCart()">Add to Cart 🛒</button>
+                <button class="primary" onclick="buyNow()">Buy Now</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <span>© 2026 Fuzzy Wire Bouquet. All rights reserved.</span>
+      </div>
+    </footer>
+
+    <!-- Shopping Cart Modal -->
+    <div id="cartModal" class="modal">
+      <div class="modal-content cart-modal-content">
+        <div class="modal-header">
+          <h2>Shopping Cart</h2>
+          <span class="close" onclick="closeCart()">&times;</span>
+        </div>
+        
+        <div class="modal-body">
+          <div id="cartItems" class="cart-items-list"></div>
+        </div>
+        
+        <div class="cart-summary">
+          <div class="cart-total">
+            <span>Total:</span>
+            <span id="cartTotal" class="total-price">0 pesos</span>
+          </div>
+        </div>
+        
+        <div class="modal-footer">
+          <button class="secondary" onclick="closeCart()">Continue Shopping</button>
+          <button class="primary" onclick="checkoutCart()" id="checkoutBtn">Checkout</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div id="checkoutModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Checkout</h2>
+          <span class="close" onclick="closeCheckout()">&times;</span>
+        </div>
+        
+        <div class="modal-body">
+          <div id="checkoutSummary" class="order-summary"></div>
+          
+          <form id="checkoutForm" class="order-form">
+            <div class="form-group">
+              <label for="checkoutPaymentMethod">Payment Method:</label>
+              <div class="payment-options">
+                <label class="payment-option">
+                  <input type="radio" id="checkoutCash" name="checkoutPayment" value="cash" checked>
+                  <span>Cash on Delivery</span>
+                </label>
+                <label class="payment-option">
+                  <input type="radio" id="checkoutGcash" name="checkoutPayment" value="gcash">
+                  <span>GCash</span>
+                </label>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="checkoutFullName">Full Name:</label>
+              <input type="text" id="checkoutFullName" name="checkoutFullName" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="checkoutPhone">Phone Number:</label>
+              <input type="tel" id="checkoutPhone" name="checkoutPhone" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="checkoutAddress">Delivery Address:</label>
+              <textarea id="checkoutAddress" name="checkoutAddress" rows="3" required placeholder="Enter your complete delivery address"></textarea>
+            </div>
+            
+            <div class="form-group">
+              <label for="checkoutNotes">Special Instructions (Optional):</label>
+              <textarea id="checkoutNotes" name="checkoutNotes" rows="2" placeholder="Any special instructions"></textarea>
+            </div>
+          </form>
+        </div>
+        
+        <div class="modal-footer">
+          <button class="secondary" onclick="closeCheckout()">Cancel</button>
+          <button class="primary" onclick="submitCheckout()">Place Order</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Order Modal -->
+    <div id="orderModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Complete Your Order</h2>
+          <span class="close" onclick="closeModal()">&times;</span>
+        </div>
+        
+        <div class="modal-body">
+          <div id="orderSummary" class="order-summary"></div>
+          
+          <form id="orderForm" class="order-form">
+            <div class="form-group">
+              <label for="paymentMethod">Payment Method:</label>
+              <div class="payment-options">
+                <label class="payment-option">
+                  <input type="radio" id="cash" name="payment" value="cash" checked>
+                  <span>Cash on Delivery</span>
+                </label>
+                <label class="payment-option">
+                  <input type="radio" id="gcash" name="payment" value="gcash">
+                  <span>GCash</span>
+                </label>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="fullName">Full Name:</label>
+              <input type="text" id="fullName" name="fullName" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="phone">Phone Number:</label>
+              <input type="tel" id="phone" name="phone" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="address">Delivery Address:</label>
+              <textarea id="address" name="address" rows="3" required placeholder="Enter your complete delivery address"></textarea>
+            </div>
+            
+            <div class="form-group">
+              <label for="notes">Special Instructions (Optional):</label>
+              <textarea id="notes" name="notes" rows="2" placeholder="Any special instructions"></textarea>
+            </div>
+          </form>
+        </div>
+        
+        <div class="modal-footer">
+          <button class="secondary" onclick="closeModal()">Cancel</button>
+          <button class="primary" onclick="submitOrder()">Place Order</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const items = {
+        tulip: {
+          name: 'Tulip',
+          price: 70,
+          image: '',
+          options: [
+            { label: 'Service item one - 1 stem', price: 70, image: 'fuzzy-wire-tulip-1stem.jpg' },
+            { label: 'Service item two - 2 stems', price: 140, image: 'fuzzy-wire-tulip-2stem.jpg' },
+            { label: 'Service item three - 3 stems', price: 210, image: 'fuzzy-wire-tulip-3stem.jpg' }
+          ]
+        },
+        lily: {
+          name: 'Lily',
+          price: 75,
+          image: '',
+          options: [
+            { label: 'Service item one - 1 stem', price: 75, image: 'fuzzy-wire-lily-1stem.jpg' },
+            { label: 'Service item two - 2 stems', price: 150, image: 'fuzzy-wire-lily-2stem.jpg' },
+            { label: 'Service item three - 3 stems', price: 225, image: 'fuzzy-wire-lily-3stem.jpg' }
+          ]
+        },
+        sunflower: {
+          name: 'Sunflower',
+          price: 80,
+          image: '',
+          options: [
+            { label: 'Service item one - 1 stem', price: 80, image: 'fuzzy-wire-sunflower-1stem.jpg' },
+            { label: 'Service item two - 2 stems', price: 160, image: 'fuzzy-wire-sunflower-2stem.jpg' },
+            { label: 'Service item three - 3 stems', price: 240, image: 'fuzzy-wire-sunflower-3stem.jpg' }
+          ]
+        }
+      };
+
+      function getItemFromURL() {
+        const params = new URLSearchParams(window.location.search);
+        return params.get('item');
+      }
+
+      function loadItemDetails() {
+        const itemKey = getItemFromURL();
+        const item = items[itemKey];
+
+        if (!item) {
+          document.getElementById('detail').innerHTML = '<div class="container"><p>Item not found. <a href="index.html">Back to Home Page</a></p></div>';
+          return;
+        }
+
+        document.getElementById('itemName').textContent = item.name;
+        document.getElementById('itemImage').src = item.image;
+        document.getElementById('itemImage').alt = item.name;
+
+        const optionsList = document.getElementById('optionsList');
+        optionsList.innerHTML = item.options.map((option, index) => `
+          <div class="option-item">
+            <input type="radio" id="option${index}" name="option" value="${index}" ${index === 0 ? 'checked' : ''} onchange="updateMainImage(${index})">
+            <label for="option${index}" class="option-label">
+              <img src="${option.image}" alt="${option.label}" class="option-image" />
+              <div class="option-details">
+                <span class="option-text">${option.label}</span>
+                <span class="option-price">${option.price} pesos</span>
+              </div>
+            </label>
+          </div>
+        `).join('');
+
+        // Set initial main image to first option
+        updateMainImage(0);
+      }
+
+      function updateMainImage(optionIndex) {
+        const itemKey = getItemFromURL();
+        const item = items[itemKey];
+        const selectedOption = item.options[optionIndex];
+        
+        const mainImage = document.getElementById('itemImage');
+        mainImage.src = selectedOption.image;
+        mainImage.alt = selectedOption.label;
+      }
+
+      function addProductToCart() {
+        const itemKey = getItemFromURL();
+        const item = items[itemKey];
+        const selectedOption = document.querySelector('input[name="option"]:checked');
+        
+        if (!selectedOption) {
+          alert('Please select an option first.');
+          return;
+        }
+        
+        const optionIndex = parseInt(selectedOption.value);
+        const selectedOptionData = item.options[optionIndex];
+        
+        // Add to cart
+        const cart = getCart();
+        const cartItem = {
+          id: itemKey + '_' + optionIndex + '_' + Date.now(),
+          item: itemKey,
+          name: item.name,
+          option: selectedOptionData.label,
+          price: selectedOptionData.price,
+          image: selectedOptionData.image,
+          quantity: 1
+        };
+        
+        cart.push(cartItem);
+        saveCart(cart);
+        
+        // Show success message and redirect to home
+        alert('Item added to cart! 🛍');
+        window.location.href = 'index.html';
+      }
+
+      function buyNow() {
+        const itemKey = getItemFromURL();
+        const item = items[itemKey];
+        const selectedOption = document.querySelector('input[name="option"]:checked');
+        
+        if (!selectedOption) {
+          alert('Please select an option first.');
+          return;
+        }
+        
+        const optionIndex = parseInt(selectedOption.value);
+        const selectedOptionData = item.options[optionIndex];
+        
+        // Store selected item for order submission
+        window.selectedItem = {
+          item: itemKey,
+          name: item.name,
+          option: selectedOptionData.label,
+          price: selectedOptionData.price,
+          image: selectedOptionData.image
+        };
+        
+        // Show order summary in modal
+        showOrderSummary();
+        
+        // Open modal
+        document.getElementById('orderModal').style.display = 'block';
+      }
+
+      function showOrderSummary() {
+        const summary = document.getElementById('orderSummary');
+        summary.innerHTML = `
+          <div class="summary-item">
+            <img src="${window.selectedItem.image}" alt="${window.selectedItem.name}" class="summary-image">
+            <div class="summary-details">
+              <h3>${window.selectedItem.name}</h3>
+              <p>${window.selectedItem.option}</p>
+              <p class="summary-price">${window.selectedItem.price} pesos</p>
+            </div>
+          </div>
+        `;
+      }
+
+      function closeModal() {
+        document.getElementById('orderModal').style.display = 'none';
+        document.getElementById('orderForm').reset();
+      }
+
+      function submitOrder() {
+        const form = document.getElementById('orderForm');
+        
+        if (!form.checkValidity()) {
+          alert('Please fill in all required fields.');
+          return;
+        }
+        
+        const formData = new FormData(form);
+        const paymentMethod = formData.get('payment');
+        const fullName = formData.get('fullName');
+        const phone = formData.get('phone');
+        const address = formData.get('address');
+        const notes = formData.get('notes');
+
+        const orderDetails = {
+          item: window.selectedItem,
+          customer: {
+            name: fullName,
+            phone: phone,
+            address: address,
+            notes: notes
+          },
+          payment: paymentMethod,
+          orderDate: new Date().toLocaleString()
+        };
+
+        const isGCash = orderDetails.payment === 'gcash';
+
+        const paymentLine = isGCash
+          ? 'Payment Method: GCash (you will receive our official shop GCash number/QR and the transaction will appear as a purchase from our shop).'
+          : `Payment Method: Cash on Delivery`;
+
+        const extraLine = isGCash
+          ? '\n\nThis order will be processed just like buying directly in our physical shop. Please wait for our confirmation message with the exact GCash details.'
+          : '\n\nPlease prepare the exact amount for payment upon delivery.';
+
+        // For now, just show confirmation. You can integrate with backend later
+        alert(
+          `Order placed successfully!\n\n` +
+          `Item: ${orderDetails.item.name}\n` +
+          `Option: ${orderDetails.item.option}\n` +
+          `Price: ${orderDetails.item.price} pesos\n` +
+          `${paymentLine}\n\n` +
+          `Customer: ${orderDetails.customer.name}\n` +
+          `Phone: ${orderDetails.customer.phone}\n` +
+          `Address: ${orderDetails.customer.address}` +
+          extraLine
+        );
+        
+        closeModal();
+      }
+
+      // Load details when page loads
+      window.addEventListener('DOMContentLoaded', loadItemDetails);
+
+      // Cart Management Functions
+      function getCart() {
+        const cart = localStorage.getItem('fuszyWireCart');
+        return cart ? JSON.parse(cart) : [];
+      }
+
+      function saveCart(cart) {
+        localStorage.setItem('fuszyWireCart', JSON.stringify(cart));
+        updateCartBadge();
+      }
+
+      function updateCartBadge() {
+        const cart = getCart();
+        const badge = document.getElementById('cartBadge');
+        const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+        badge.textContent = totalItems;
+      }
+
+      function viewCart() {
+        const cart = getCart();
+        const cartItemsDiv = document.getElementById('cartItems');
+        
+        if (cart.length === 0) {
+          cartItemsDiv.innerHTML = '<p class="empty-cart">Your cart is empty. Start adding items!</p>';
+        } else {
+          cartItemsDiv.innerHTML = cart.map((item, index) => `
+            <div class="cart-item">
+              <img src="${item.image}" alt="${item.name}" class="cart-item-image">
+              <div class="cart-item-details">
+                <h4>${item.name}</h4>
+                <p class="cart-item-option">${item.option}</p>
+                <p class="cart-item-price">${item.price} pesos</p>
+              </div>
+              <div class="cart-item-quantity">
+                <button class="qty-btn" onclick="decreaseQty(${index})">−</button>
+                <input type="number" value="${item.quantity || 1}" readonly class="qty-input">
+                <button class="qty-btn" onclick="increaseQty(${index})">+</button>
+              </div>
+              <button class="remove-btn" onclick="removeFromCart(${index})">Remove</button>
+            </div>
+          `).join('');
+        }
+        
+        updateCartTotal();
+        document.getElementById('cartModal').style.display = 'block';
+      }
+
+      function closeCart() {
+        document.getElementById('cartModal').style.display = 'none';
+      }
+
+      function updateCartTotal() {
+        const cart = getCart();
+        const total = cart.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
+        document.getElementById('cartTotal').textContent = total + ' pesos';
+      }
+
+      function removeFromCart(index) {
+        const cart = getCart();
+        cart.splice(index, 1);
+        saveCart(cart);
+        viewCart();
+      }
+
+      function increaseQty(index) {
+        const cart = getCart();
+        cart[index].quantity = (cart[index].quantity || 1) + 1;
+        saveCart(cart);
+        viewCart();
+      }
+
+      function decreaseQty(index) {
+        const cart = getCart();
+        if (cart[index].quantity > 1) {
+          cart[index].quantity--;
+          saveCart(cart);
+          viewCart();
+        }
+      }
+
+      function checkoutCart() {
+        const cart = getCart();
+        if (cart.length === 0) {
+          alert('Your cart is empty!');
+          return;
+        }
+        
+        // Store cart for checkout
+        window.checkoutCart = cart;
+        
+        // Show checkout summary
+        showCheckoutSummary();
+        
+        // Close cart modal and open checkout modal
+        closeCart();
+        document.getElementById('checkoutModal').style.display = 'block';
+      }
+
+      function closeCheckout() {
+        document.getElementById('checkoutModal').style.display = 'none';
+        document.getElementById('checkoutForm').reset();
+      }
+
+      function showCheckoutSummary() {
+        const summary = document.getElementById('checkoutSummary');
+        const cart = window.checkoutCart || [];
+        
+        let totalPrice = 0;
+        const itemsHtml = cart.map(item => {
+          const itemTotal = item.price * (item.quantity || 1);
+          totalPrice += itemTotal;
+          return `
+            <div class="summary-item">
+              <img src="${item.image}" alt="${item.name}" class="summary-image">
+              <div class="summary-details">
+                <h3>${item.name}</h3>
+                <p>${item.option}</p>
+                <p class="summary-price">${item.price} pesos x ${item.quantity || 1}</p>
+              </div>
+            </div>
+          `;
+        }).join('');
+        
+        summary.innerHTML = itemsHtml + `
+          <div class="checkout-total" style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--outline);">
+            <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 1.1rem;">
+              <span>Total Amount:</span>
+              <span style="color: var(--accent);">${totalPrice} pesos</span>
+            </div>
+          </div>
+        `;
+      }
+
+      function submitCheckout() {
+        const form = document.getElementById('checkoutForm');
+        
+        if (!form.checkValidity()) {
+          alert('Please fill in all required fields.');
+          return;
+        }
+        
+        const formData = new FormData(form);
+        const paymentMethod = formData.get('checkoutPayment');
+        const fullName = formData.get('checkoutFullName');
+        const phone = formData.get('checkoutPhone');
+        const address = formData.get('checkoutAddress');
+        const notes = formData.get('checkoutNotes');
+        const cart = window.checkoutCart || [];
+        
+        const totalPrice = cart.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
+
+        const isGCash = paymentMethod === 'gcash';
+
+        const paymentLine = isGCash
+          ? 'Payment Method: GCash (you will receive our official shop GCash number/QR and the transaction will appear as a purchase from our shop).'
+          : `Payment Method: Cash on Delivery`;
+
+        const extraLine = isGCash
+          ? '\\n\\nThis order will be processed just like buying directly in our physical shop. Please wait for our confirmation message with the exact GCash details.'
+          : '\\n\\nPlease prepare the exact amount for payment upon delivery.';
+
+        const orderSummary = cart.map(item => 
+          `• ${item.name} - ${item.option} (${item.quantity || 1}x) - ${item.price * (item.quantity || 1)} pesos`
+        ).join('\\n');
+
+        const emailMessage = `Order placed successfully!\\n\\n${orderSummary}\\n\\nTotal: ${totalPrice} pesos\\n${paymentLine}\\n\\nCustomer: ${fullName}\\nPhone: ${phone}\\nAddress: ${address}` + extraLine;
+
+        // Send email via fetch
+        fetch('https://formspree.io/f/xykngblp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            customerName: fullName,
+            phone: phone,
+            address: address,
+            notes: notes,
+            payment: paymentMethod,
+            cartItems: cart,
+            totalPrice: totalPrice,
+            type: 'cart_order',
+            date: new Date().toLocaleString()
+          })
+        }).then(response => {
+          alert(emailMessage);
+          closeCheckout();
+          // Clear the cart
+          localStorage.removeItem('fuszyWireCart');
+          updateCartBadge();
+        }).catch(error => {
+          alert(emailMessage);
+          closeCheckout();
+          localStorage.removeItem('fuszyWireCart');
+          updateCartBadge();
+        });
+      }
+
+      // Initialize cart badge on page load
+      window.addEventListener('DOMContentLoaded', updateCartBadge);
+    </script>
+  </body>
+</html>
